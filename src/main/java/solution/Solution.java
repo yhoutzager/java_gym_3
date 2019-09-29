@@ -1,11 +1,12 @@
 package solution;
 
-import java.util.Optional;
-
-import javax.annotation.Nonnull;
-
 import noedit.Data;
 import noedit.Registers;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * This solution represents a special CPU cache manager. It can store and lookup data.
@@ -27,9 +28,12 @@ public class Solution {
 
     @Nonnull
     private final Registers registers;
+    private List<CachedTree> cachedTrees;
 
     public Solution(@Nonnull Registers registers) {
         this.registers = registers;
+        cachedTrees = new ArrayList<>();
+        cachedTrees.add(new CachedTree(0));
     }
 
     /**
@@ -39,8 +43,7 @@ public class Solution {
      */
     @Nonnull
     public void store(@Nonnull Data storeItem) {
-        //TODO: Implement your solution here
-        throw new UnsupportedOperationException("solution not yet implemented");
+        cachedTrees.get(0).add(storeItem.hashCode());
     }
 
     /**
@@ -50,7 +53,16 @@ public class Solution {
      */
     @Nonnull
     public Optional<Integer> lookup(@Nonnull Data searchItem) {
-        //TODO: Implement your solution here
-        throw new UnsupportedOperationException("solution not yet implemented");
+        for (CachedTree cachedRegister : cachedTrees) {
+            if (cachedRegister.containsValue(searchItem.hashCode())) {
+                return Optional.of(cachedRegister.number);
+            }
+        }
+        return Optional.empty();
     }
+
+    /**
+     * Queue voor het bijhouden van het oudste item.
+     * binary-search-tree voor lookup?
+     */
 }
